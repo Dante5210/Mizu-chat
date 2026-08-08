@@ -78,15 +78,18 @@ setInput("");
 setLoading(true);
 setError(false);
 try {
-const response = await fetch("https://api.anthropic.com/v1/messages", {
-method: "POST",
-headers: { "Content-Type": "application/json" },
-body: JSON.stringify({
-model: "claude-sonnet-4-6",
-max_tokens: 1000,
-system: SYSTEM_PROMPT,
-messages: newMessages.map((m) => ({ role: m.role, content: m.content })),
-}),
+const response = await fetch("/api/chat", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify({
+    system: SYSTEM_PROMPT,
+    messages: newMessages.map((m) => ({
+      role: m.role,
+      content: m.content,
+    })),
+  }),
 });
 const data = await response.json();
 const reply = (data?.content || []).map((b) => b.text || "").join("").trim();
